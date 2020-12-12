@@ -73,7 +73,7 @@ func RedisHGet(key string, field string) (interface{}, error) {
 	data, err := redisClient.HGet(key, field).Result()
 
 	if err == redis.Nil {
-		return nil, err
+		return nil, nil
 	}
 
 	if err != nil {
