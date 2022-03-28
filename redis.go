@@ -127,3 +127,16 @@ func RedisIncrby(key string, value int64) error {
 
 	return nil
 }
+
+// RedisDel is function to send a data array from redis database
+// Return array data and error redis
+func RedisDel(key string) error {
+	redisClient := newRedisClient()
+	err := redisClient.Del(key).Err()
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
