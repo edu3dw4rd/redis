@@ -2,6 +2,7 @@ package locker
 
 import (
 	"fmt"
+	"log"
 	"time"
 
 	"github.com/edu3dw4rd/redis"
@@ -42,18 +43,24 @@ func (l *LockerManager) ObtainLock(key string, retryNum int, ttl, retryDelay tim
 		mutex = l.redisSync.NewMutex(key)
 	}
 
+	log.Printf("======= Obtaining Lock for [%s]..... ======= \n", key)
 	if err := mutex.Lock(); err != nil {
 		return nil, fmt.Errorf("failed to obtain lock [%s]: %s", mutex.Name(), err.Error())
 	}
+	log.Printf("======= Obtaining Lock for [%s] SUCCESSFUL..... ======= \n", key)
 
 	return mutex, nil
 }
 
 func (l *LockerManager) ReleaseLock(mutex *redsync.Mutex) error {
+	lockName := mutex.Name()
+
+	log.Printf("======= Releasing Lock for [%s]..... ======= \n", lockName)
 	if ok, err := mutex.Unlock(); !ok || err != nil {
-		return fmt.Errorf("failed to release lock [%s]: %s", mutex.Name(), err.Error())
+		return fmt.Errorf("failed to release lock [%s]: %s", lockName, err.Error())
 	}
 
+	log.Printf("======= Releasing Lock for [%s] SUCCESSFUL..... ======= \n", lockName)
 	return nil
 }
 
