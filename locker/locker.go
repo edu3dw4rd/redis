@@ -43,7 +43,7 @@ func (l *LockerManager) ObtainLock(key string, retryNum int, ttl, retryDelay tim
 	}
 
 	if err := mutex.Lock(); err != nil {
-		return nil, fmt.Errorf("failed to obtain lock [%s]: %s", mutex.Name, err.Error())
+		return nil, fmt.Errorf("failed to obtain lock [%s]: %s", mutex.Name(), err.Error())
 	}
 
 	return mutex, nil
@@ -51,7 +51,7 @@ func (l *LockerManager) ObtainLock(key string, retryNum int, ttl, retryDelay tim
 
 func (l *LockerManager) ReleaseLock(mutex *redsync.Mutex) error {
 	if ok, err := mutex.Unlock(); !ok || err != nil {
-		return fmt.Errorf("failed to release lock [%s]: %s", mutex.Name, err.Error())
+		return fmt.Errorf("failed to release lock [%s]: %s", mutex.Name(), err.Error())
 	}
 
 	return nil
