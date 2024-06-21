@@ -140,3 +140,11 @@ func RedisDel(key string) error {
 
 	return nil
 }
+
+func GetRedisClient() *redis.Client {
+	if redisInstance == nil || redisInstance.rds == nil {
+		return newRedisClient()
+	}
+
+	return redisInstance.rds
+}
